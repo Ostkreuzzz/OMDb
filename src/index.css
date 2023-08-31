@@ -201,6 +201,7 @@ body {
 .btn-delete {
   position: absolute;
   right: 2.4rem;
+  cursor: pointer;
 
   height: 1.8rem;
   aspect-ratio: 1;
@@ -210,7 +211,6 @@ body {
   color: var(--color-background-900);
   font-size: 0.9rem;
   font-weight: bold;
-  cursor: pointer;
   transition: all 0.3s;
 }
 
