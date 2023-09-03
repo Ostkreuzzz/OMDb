@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import StarRating from "./StarRating";
 import { useMovies } from "./useMovies";
 import { useLocalStorageState } from "./useLocalStorageState";
+import { useKey } from "./useKey";
 
 const KEY = "a9255fff";
 
@@ -9,11 +10,8 @@ const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
 export default function App() {
-  const storedValue = JSON.parse(localStorage.getItem("watched")) || [];
-
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
-  const [watched, setWatched] = useState(storedValue);
   //const [watched, setWatched] = useState([]);
 
   function handleSelectMovie(id) {
@@ -33,14 +31,7 @@ export default function App() {
   }
 
   const { movies, isLoading, error } = useMovies(query);
-  const [watched, setWatched] = useLocalStorageState([]);
-
-  useEffect(
-    function () {
-      localStorage.setItem("watched", JSON.stringify(watched));
-    },
-    [watched]
-  );
+  const [watched, setWatched] = useLocalStorageState([], "watched");
 
   return (
     <>
@@ -227,19 +218,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWathched, watched }) {
     onCloseMovie();
   }
 
-  useEffect(
-    function () {
-      function callBack(e) {
-        if (e.code === "Escape ") {
-          onCloseMovie();
-        }
-      }
-      return function () {
-        document.removeEventListener("keydown", callBack);
-      };
-    },
-    [onCloseMovie]
-  );
+  useKey("Escape", onCloseMovie);
 
   useEffect(
     function () {
